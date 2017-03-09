@@ -1,16 +1,19 @@
-dict_str = File.read('dictionary.txt')
+dict_arr = File.read('dictionary.txt').split
 
-dict_arr = dict_str.split()
-
-secret_words = dict_arr.select do |word|
-  word.length > 4 and word.length < 13
+def get_word_pool(dictionary)
+  dictionary.select do |word|
+    word.length > 4 and word.length < 13
+  end
 end
 
-secret_word = secret_words.sample
+word_pool = get_word_pool(dict_arr)
 
-guesses = 10
+$secret_word = word_pool.sample
 
-def make_hidden_letters_array(secret_word)
+
+$guesses = 10
+
+def hide_letters(secret_word)
   secret_word.each_char.map do |letter|
     '_ '
   end    
@@ -18,25 +21,54 @@ end
 
 puts "here's ur word"
 
-hidden_letters = make_hidden_letters_array(secret_word)
+$hidden_letters = hide_letters($secret_word)
 
-p secret_word
+p $secret_word
 
-puts hidden_letters.join
+#puts hidden_letters.join
 
-puts "wuz ur guess"
-guess = gets
+#puts "wuz ur guess"
+#guess = gets
 
 
-letter_indices = []
-secret_word.each_char.each_with_index do |letter, index|
-  if guess[0] == letter
-    letter_indices << index
+#letter_indices = []
+#secret_word.each_char.each_with_index do |letter, index|
+#  if guess[0] == letter
+#    letter_indices << index
+#  end
+#end
+
+#letter_indices.each do |index|
+#  hidden_letters[index] = guess[0]
+#end
+
+#puts hidden_letters.join
+
+
+def play
+  until $hidden_letters.join == $secret_word or $guesses == 0
+    puts "wuz ur guess (#{$guesses} remaining)"
+    guess = gets
+    
+
+
+    letter_indices = []
+    $secret_word.each_char.each_with_index do |letter, index|
+      if guess[0] == letter
+        letter_indices << index
+      end
+    end
+
+    if letter_indices.empty?
+      $guesses -= 1
+    end
+
+    letter_indices.each do |index|
+      $hidden_letters[index] = guess[0]
+    end
+
+    puts $hidden_letters.join
   end
 end
 
-letter_indices.each do |index|
-  hidden_letters[index] = guess[0]
-end
-
-puts hidden_letters.join
+play
