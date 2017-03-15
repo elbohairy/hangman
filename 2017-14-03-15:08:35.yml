@@ -1,0 +1,73 @@
+--- !ruby/object:Game
+guesses: 10
+dict_arr:
+- A
+- a
+- Aachen
+- Aalborg
+- aardvark
+- Aarhus
+- Aaron
+- AB
+- Ab
+word_pool:
+- zipper
+- zippy
+- zircon
+- zirconium
+- zither
+- zitherist
+- zloty
+- zodiac
+- zodiacal
+- zoftig
+- Zomba
+- zombi
+- zombie
+- zombielike
+- zonal
+- zonally
+- zoned
+- zoning
+- zonked
+- zoogeography
+- zookeeper
+- zoologic
+- zoological
+- zoologist
+- zoology
+- zoomorphic
+- zoomorphism
+- zoophyte
+- zoophytic
+- zooplankton
+- zoospore
+- zootsuiter
+- Zoroaster
+- Zoroastrian
+- Zouave
+- zounds
+- zoysia
+- zucchetto
+- zucchini
+- Zululand
+- Zurich
+- zwieback
+- Zwingli
+- Zwinglian
+- zydeco
+- zygoses
+- zygosis
+- zygote
+- zygotic
+- zymurgy
+secret_word: Mexicali
+hidden_letters:
+- '_ '
+- e
+- '_ '
+- i
+- '_ '
+- a
+- '_ '
+- i

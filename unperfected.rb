@@ -1,3 +1,5 @@
+require 'yaml'
+
 class Game
   attr_accessor :dict_arr, :word_pool, :secret_word, :guesses,
     :hidden_letters
@@ -30,18 +32,106 @@ class Game
     end
   end
 
-  def hidden_letters
+  def set_hidden_letters
     @hidden_letters = hide_letters(@secret_word)
   end
 
+  def save
+    File.open(Time.new.strftime("%Y-%d-%m-%T.yml"), 'w') do |file|
+      file.puts YAML::dump(self)
+    end
+  end
+
+  def list_saves
+    counter = 0
+    saves = {}
+    Dir.entries(Dir.pwd).each do |file|
+      if file.match(/\.yml/)
+        puts "#{counter} #{file}"
+        saves[counter] = file
+        counter += 1
+      end
+    end
+
+    saves
+  end
+
+  def load
+    puts "Would you like to load a previous save? (Y or N)"
+    answer = gets.chomp
+    if answer == 'N'
+      return
+    end
+    saves = list_saves
+    puts "Enter the corresponding number to load the save"
+    number = gets
+    save_file = ''
+    saves.each do |num, file|
+      if number.to_i == num
+        save_file = file
+      end
+    end
+
+    yaml_string = File.read(save_file)
+    save = YAML::load(yaml_string)
+
+    @guesses = save.guesses
+    #@secret_word = save.secret_word
+    #@hidden_letters = save.hidden_letters
+    @hidden_letters = save.hidden_letters
+    @secret_word = save.secret_word
+
+    play_from_save
+
+  end
+
+  def play_from_save
+     puts @hidden_letters.join
+    until @hidden_letters.join == @secret_word or @guesses == 0
+      puts "What is your guess? (#{@guesses} remaining) (Enter 1 to save)"
+      guess = gets
+
+      if guess.to_i == 1
+        save
+        redo
+      end
+
+      letter_indices = []
+      @secret_word.each_char.each_with_index do |letter, index|
+        if guess[0] == letter
+          letter_indices << index
+        end
+      end
+
+      if letter_indices.empty?
+        @guesses -= 1
+      end
+
+      letter_indices.each do |index|
+        @hidden_letters[index] = guess[0]
+      end
+
+      puts @hidden_letters.join
+    end
+    exit
+  end
+
+
   public
   def play
+    load
     create_secret_word
-    hidden_letters
+    set_hidden_letters
 
-    until @hidden_letters.join == @secret_word or @guess == 0
-      puts "What is your guess? (#{@guesses} remaining)"
+    puts @hidden_letters.join
+    until @hidden_letters.join == @secret_word or @guesses == 0
+      puts "What is your guess? (#{@guesses} remaining) (Enter 1 to save)"
       guess = gets
+
+      if guess.to_i == 1
+        save
+        redo
+      end
 
       letter_indices = []
       @secret_word.each_char.each_with_index do |letter, index|
@@ -68,3 +158,12 @@ end
 s = Game.new
 
 s.play
+
+#puts YAML::dump(s)
+
+#def current_time
+#  @current_time = Time.new
+#end
+
+#current_time
+#save_filename = @current_time.strftime("%Y-%d-%m-%T")
