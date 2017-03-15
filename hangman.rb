@@ -4,6 +4,7 @@
 # => Show the winning word of the user fails to guess it
 # => Clean up the methods. Some methods are doing a lot of work.
 # => More refactoring in general.
+# => Place the saves in a save folder
 
 require 'yaml'
 
